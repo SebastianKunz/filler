@@ -6,7 +6,7 @@
 #    By: skunz <skunz@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/12/20 14:30:14 by skunz             #+#    #+#              #
-#    Updated: 2019/01/01 15:57:48 by skunz            ###   ########.fr        #
+#    Updated: 2019/01/03 10:40:47 by skunz            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,11 +14,11 @@
 
 NAME = skunz.filler
 
-FLAGS = -Wall -Wextra -Werror -fsanitize=address
+FLAGS = -Wall -Wextra -Werror -fsanitize=address -g
 
 SRC_DIR = ./src/
 
-SRC = main.c map.c
+SRC = main.c map.c place.c heat.c
 
 ###################################### OBJECTS #################################
 

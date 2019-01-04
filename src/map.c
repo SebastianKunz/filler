@@ -6,13 +6,13 @@
 /*   By: skunz <skunz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/29 10:28:54 by skunz             #+#    #+#             */
-/*   Updated: 2019/01/01 15:45:13 by skunz            ###   ########.fr       */
+/*   Updated: 2019/01/03 15:32:44 by skunz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "filler.h"
 
-void	get_player_number(char *player_num)
+void	get_player_number(t_global *global)
 {
 	char	*line;
 	char	ret;
@@ -20,9 +20,15 @@ void	get_player_number(char *player_num)
 	if((ret = get_next_line(0, &line)) == -1)
 		ft_error(e_open_file);
 	if (ft_strstr(line, "p1"))
-		*player_num = 'O';
+	{
+		global->player.sign = 'O';
+		global->enemy.sign = 'X';
+	}
 	else
-		*player_num = 'X';
+	{
+		global->player.sign = 'X';
+		global->enemy.sign = 'O';
+	}
 	free(line);
 }
 
@@ -35,11 +41,13 @@ void	get_size(t_point *size)
 
 	if ((ret = get_next_line(0, &line) == -1))
 		ft_error(e_open_file);
-	fprintf(stderr, "%s\n", line);
-	info = ft_strsplit(line, ' ');
+	if (!(info = ft_strsplit(line, ' ')))
+		ft_error(e_malloc);
+	// fprintf(stderr, "line is: %s\n", line);
+	// fflush(stderr);
 	size->x = ft_atoi(info[2]);
 	size->y = ft_atoi(info[1]);
-	ft_free2d(info, 3);
+	ft_free2d((void**)info, 3);
 	free(line);
 }
 
@@ -49,7 +57,6 @@ void	get_piece(t_piece *piece)
 	int		y;
 
 	y = -1;
-	get_next_line(0, &line);
 	get_size(&piece->size);
 	if (!(piece->map = malloc(sizeof(char*) * piece->size.y)))
 		ft_error(e_malloc);
@@ -68,9 +75,9 @@ void	get_board(t_board *board)
 
 	y = -1;
 	get_size(&board->size);
-	if(!(board->map = malloc(sizeof(char*) * board->size.y)))
+	if(!(board->map = malloc(sizeof(char*) * board->size.y + 1)))
 		ft_error(e_malloc);
-	while (++y < board->size.y)
+	while (++y < board->size.y + 1)
 	{
 		get_next_line(0, &line);
 		if (y > 0 && y < board->size.y + 1)
