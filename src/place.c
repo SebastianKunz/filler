@@ -6,7 +6,7 @@
 /*   By: skunz <skunz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/02 11:03:52 by skunz             #+#    #+#             */
-/*   Updated: 2019/01/05 17:02:45 by skunz            ###   ########.fr       */
+/*   Updated: 2019/01/05 20:41:48 by skunz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,92 +37,79 @@ void	get_offset(t_global *g)
 	g->offset.y = min_y;
 }
 
+// void	ft_check(t_global *g, int b_y, int b_x, int *hits)
+// {
+// 	if ((g->board.map[b_y][b_x] == g->enemy.sign ||
+// 		g->board.map[b_y][b_x] == ft_tolower(g->enemy.sign)) &&
+// 			g->piece.map[y][x] == '*')
+// 		return (0);
+// 	if (g->piece.map[y][x] == '*' &&
+// 		(g->board.map[b_y][b_x] == g->player.sign ||
+// 			g->board.map[b_y][b_x] == ft_tolower(g->player.sign)))
+// 		*hits++;
+// }
+
 int		is_placeable(t_global *g, int b_y, int b_x)
 {
 	int	score;
 	int	hits;
 	int	y;
 	int	x;
-	int prev_bx;
 
-	get_offset(g);
-	y = g->offset.y - 1;
-	hits = 0;
 	score = 0;
-	prev_bx = b_x;
+	hits = 0;
+	y = g->offset.y - 1;
 	while (++y < g->piece.size.y)
 	{
 		x = g->offset.x - 1;
-		// fprintf(stderr, "b_x is %d\n", b_x);
-		// fflush(stderr);
 		while (++x < g->piece.size.x)
 		{
-			// fprintf(stderr, "board y:%d x:%d\n", b_y, b_x);
-			// fflush(stderr);
-			if ((g->board.map[b_y][b_x] == g->enemy.sign || g->board.map[b_y][b_x] == ft_tolower(g->enemy.sign))&& g->piece.map[y][x] == '*')
+			if ((g->board.map[b_y][b_x] == g->enemy.sign ||
+				g->board.map[b_y][b_x] == ft_tolower(g->enemy.sign)) &&
+					g->piece.map[y][x] == '*')
 				return (0);
-			if (g->piece.map[y][x] == '*' && (g->board.map[b_y][b_x] == g->player.sign || g->board.map[b_y][b_x] == ft_tolower(g->player.sign)))
+			if (g->piece.map[y][x] == '*' &&
+				(g->board.map[b_y][b_x] == g->player.sign ||
+					g->board.map[b_y][b_x] == ft_tolower(g->player.sign)))
 				hits++;
-			if (g->piece.map[y][x] == '*' && g->heat[b_y][b_x] > 0)
+			if (g->piece.map[y][x] == '*')
 				score += g->heat[b_y][b_x];
-			b_x++;
-			if (b_x >= g->board.size.x)
-				return (0);
+			if (++b_x >= g->board.size.x)
+				return (0); //implement crossover
 		}
-		b_x = prev_bx;
-		// if (b_x < 0)
-			// return (0);
-		b_y++;
-		if (b_y >= g->board.size.y)
-			return (0);
+		b_x -= g->piece.size.x - g->offset.x;
+		if (++b_y >= g->board.size.y)
+			return (0); //implement crossover
 	}
-	if (hits == 1)
-		return (score);
-	return (0);
+	score = (hits == 1) ? score : 0;
+	return (score);
 }
 
-void	ft_place(t_global g)
+int		ft_place(t_global g)
 {
-	int y;
-	int x;
-	int	score;
-	int lowest_score;
-	int set;
-	t_point closest;
+	t_point	closest;
+	int		y;
+	int		x;
+	int		score;
+	int		lowest_score;
 
 	y = -1;
-	set = 0;
 	lowest_score = 2147483647;
+	get_offset(&g);
 	while (++y < g.board.size.y)
 	{
 		x = -1;
 		while (++x < g.board.size.x)
-		{
-			// fprintf(stderr, "Trying y:%d x:%d\n", y, x);
-			// fflush(stderr);
 			if ((score = is_placeable(&g, y, x)))
-			{
-					// fprintf(stderr, "Score %d for y:%d x:%d\n", score, y, x);
-					// fflush(stderr);
 				if (score <= lowest_score)
 				{
 					closest.x = x - g.offset.x;
 					closest.y = y - g.offset.y;
-					set = 1;
 					lowest_score = score;
 				}
-			}
-		}
 	}
-	if (!set)
-	{
-		fprintf(stderr, "Could not find a place to fit the piece\n");
-		exit (-1);
-	}
-	printf("%d %d\n", closest.y, closest.x);
-	fprintf(stderr, "%d %d\n", closest.y, closest.x);
-
-	fflush(stderr);
-	fflush(stdout);
-
+	if (lowest_score == 2147483647)
+		return (0);
+	print_cords(closest);
+	return (1);
 }

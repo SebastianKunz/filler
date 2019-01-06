@@ -6,7 +6,7 @@
 /*   By: skunz <skunz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/29 10:28:54 by skunz             #+#    #+#             */
-/*   Updated: 2019/01/03 17:46:45 by skunz            ###   ########.fr       */
+/*   Updated: 2019/01/05 19:35:34 by skunz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	get_player_number(t_global *global)
 	char	*line;
 	char	ret;
 
-	if((ret = get_next_line(0, &line)) == -1)
+	if ((ret = get_next_line(0, &line)) == -1)
 		ft_error(e_open_file);
 	if (ft_strstr(line, "p1"))
 	{
@@ -31,7 +31,6 @@ void	get_player_number(t_global *global)
 	}
 	free(line);
 }
-
 
 void	get_size(t_point *size)
 {
@@ -51,7 +50,7 @@ void	get_size(t_point *size)
 
 void	get_piece(t_piece *piece)
 {
-	char *line;
+	char	*line;
 	int		y;
 
 	y = -1;
@@ -73,7 +72,7 @@ void	get_board(t_board *board)
 
 	y = -1;
 	get_size(&board->size);
-	if(!(board->map = malloc(sizeof(char*) * board->size.y + 1)))
+	if (!(board->map = malloc(sizeof(char*) * board->size.y + 1)))
 		ft_error(e_malloc);
 	while (++y < board->size.y + 1)
 	{
