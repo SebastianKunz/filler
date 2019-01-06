@@ -6,7 +6,7 @@
 /*   By: skunz <skunz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/29 09:59:20 by skunz             #+#    #+#             */
-/*   Updated: 2019/01/05 21:44:59 by skunz            ###   ########.fr       */
+/*   Updated: 2019/01/05 21:52:06 by skunz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <stdlib.h>
 # include <unistd.h>
+# include <limits.h>
 # include "map.h"
 # include "libft.h"
 

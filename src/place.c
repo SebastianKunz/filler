@@ -6,7 +6,7 @@
 /*   By: skunz <skunz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/02 11:03:52 by skunz             #+#    #+#             */
-/*   Updated: 2019/01/05 21:34:46 by skunz            ###   ########.fr       */
+/*   Updated: 2019/01/05 21:51:35 by skunz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,11 +69,11 @@ int		is_placeable(t_global *g, int b_y, int b_x)
 				hits++;
 			(g->piece.map[i.y][i.x] == '*') ? score += g->heat[b_y][b_x] : (0);
 			if (++b_x >= g->board.size.x)
-				return (0); //implement crossover
+				return (0);
 		}
 		b_x -= g->piece.size.x - g->offset.x;
 		if (++b_y >= g->board.size.y)
-			return (0); //implement crossover
+			return (0);
 	}
 	return (score = (hits == 1) ? score : 0);
 }
@@ -87,7 +87,7 @@ int		ft_place(t_global g)
 	int		lowest_score;
 
 	y = -1;
-	lowest_score = 2147483647;
+	lowest_score = INT_MAX;
 	get_offset(&g);
 	while (++y < g.board.size.y)
 	{
@@ -101,7 +101,7 @@ int		ft_place(t_global g)
 					lowest_score = score;
 				}
 	}
-	if (lowest_score == 2147483647)
+	if (lowest_score == INT_MAX)
 		return (0);
 	print_cords(closest);
 	return (1);
