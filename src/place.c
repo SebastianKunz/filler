@@ -6,7 +6,7 @@
 /*   By: skunz <skunz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/02 11:03:52 by skunz             #+#    #+#             */
-/*   Updated: 2019/01/05 20:41:48 by skunz            ###   ########.fr       */
+/*   Updated: 2019/01/05 21:34:46 by skunz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,43 +37,37 @@ void	get_offset(t_global *g)
 	g->offset.y = min_y;
 }
 
-// void	ft_check(t_global *g, int b_y, int b_x, int *hits)
-// {
-// 	if ((g->board.map[b_y][b_x] == g->enemy.sign ||
-// 		g->board.map[b_y][b_x] == ft_tolower(g->enemy.sign)) &&
-// 			g->piece.map[y][x] == '*')
-// 		return (0);
-// 	if (g->piece.map[y][x] == '*' &&
-// 		(g->board.map[b_y][b_x] == g->player.sign ||
-// 			g->board.map[b_y][b_x] == ft_tolower(g->player.sign)))
-// 		*hits++;
-// }
+int		is_free(t_global g, int b_y, int b_x, char sign)
+{
+	if (sign == -2)
+		return (g.board.map[b_y][b_x] != g.enemy.sign &&
+		g.board.map[b_y][b_x] != ft_toupper(g.enemy.sign));
+	else if (sign == -1)
+		return (g.board.map[b_y][b_x] != g.player.sign &&
+			g.board.map[b_y][b_x] != ft_toupper(g.player.sign));
+	else
+		return (42);
+}
 
 int		is_placeable(t_global *g, int b_y, int b_x)
 {
-	int	score;
-	int	hits;
-	int	y;
-	int	x;
+	t_point	i;
+	int		score;
+	int		hits;
 
 	score = 0;
 	hits = 0;
-	y = g->offset.y - 1;
-	while (++y < g->piece.size.y)
+	i.y = g->offset.y - 1;
+	while (++i.y < g->piece.size.y)
 	{
-		x = g->offset.x - 1;
-		while (++x < g->piece.size.x)
+		i.x = g->offset.x - 1;
+		while (++i.x < g->piece.size.x)
 		{
-			if ((g->board.map[b_y][b_x] == g->enemy.sign ||
-				g->board.map[b_y][b_x] == ft_tolower(g->enemy.sign)) &&
-					g->piece.map[y][x] == '*')
+			if (!is_free(*g, b_y, b_x, -2) && g->piece.map[i.y][i.x] == '*')
 				return (0);
-			if (g->piece.map[y][x] == '*' &&
-				(g->board.map[b_y][b_x] == g->player.sign ||
-					g->board.map[b_y][b_x] == ft_tolower(g->player.sign)))
+			if (g->piece.map[i.y][i.x] == '*' && !is_free(*g, b_y, b_x, -1))
 				hits++;
-			if (g->piece.map[y][x] == '*')
-				score += g->heat[b_y][b_x];
+			(g->piece.map[i.y][i.x] == '*') ? score += g->heat[b_y][b_x] : (0);
 			if (++b_x >= g->board.size.x)
 				return (0); //implement crossover
 		}
@@ -81,8 +75,7 @@ int		is_placeable(t_global *g, int b_y, int b_x)
 		if (++b_y >= g->board.size.y)
 			return (0); //implement crossover
 	}
-	score = (hits == 1) ? score : 0;
-	return (score);
+	return (score = (hits == 1) ? score : 0);
 }
 
 int		ft_place(t_global g)
