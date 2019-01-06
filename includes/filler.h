@@ -6,7 +6,7 @@
 /*   By: skunz <skunz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/29 09:59:20 by skunz             #+#    #+#             */
-/*   Updated: 2019/01/03 13:24:08 by skunz            ###   ########.fr       */
+/*   Updated: 2019/01/04 10:50:46 by skunz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ typedef struct  s_global {
     t_filler	player;
 	int			**heat;
     t_filler	enemy;
-	t_point		closest;
+	t_point		offset;
 }               t_global;
 
 enum			e_error {

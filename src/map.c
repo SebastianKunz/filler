@@ -6,7 +6,7 @@
 /*   By: skunz <skunz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/29 10:28:54 by skunz             #+#    #+#             */
-/*   Updated: 2019/01/03 15:32:44 by skunz            ###   ########.fr       */
+/*   Updated: 2019/01/03 17:46:45 by skunz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,6 @@ void	get_size(t_point *size)
 		ft_error(e_open_file);
 	if (!(info = ft_strsplit(line, ' ')))
 		ft_error(e_malloc);
-	// fprintf(stderr, "line is: %s\n", line);
-	// fflush(stderr);
 	size->x = ft_atoi(info[2]);
 	size->y = ft_atoi(info[1]);
 	ft_free2d((void**)info, 3);

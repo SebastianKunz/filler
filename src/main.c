@@ -37,32 +37,6 @@ t_point get_pos(t_point shape, t_point board)
 	return (ret);
 }
 
-
-
-// void	get_closest_piece(t_board *board)
-// {
-// 	int y;
-// 	int x;
-
-// 	y = -1;
-// 	board->closest.x = board->size.x;
-// 	board->closest.y = board->size.y;
-// 	while (++y < board->size.y)
-// 	{
-// 		x = -1;
-// 		while (++x < board->size.x)
-// 		{
-// 			if (board->map[x][y] == board->player_num || board->map[y][x] == ft_tolower(board->player_num))
-// 			{
-// 				if (ABS(x - board->enemy.x) < board->closest.x)
-// 					board->closest.x = x;
-// 				if (ABS(y - board->enemy.y) < board->closest.y)
-// 					board->closest.y = y;
-// 			}
-// 		}
-// 	}
-// }
-
 t_point	get_shape_pos(t_piece piece)
 {
 	t_point cords;
@@ -124,7 +98,12 @@ int main()
 		{
 			for (int x = 0; x < global.board.size.x; x++)
 			{
-				fprintf(stderr, "%2d ", global.heat[y][x]);
+				if (global.heat[y][x] == -2)
+					fprintf(stderr, "%2c ", global.enemy.sign);
+				else if (global.heat[y][x] == -1)
+					fprintf(stderr, "%2c ", global.player.sign);
+				else
+					fprintf(stderr, "%2d ", global.heat[y][x]);
 				fflush(stderr);
 			}
 			fprintf(stderr, "\n");
@@ -133,27 +112,6 @@ int main()
 
 		ft_place(global);
 		free_global(&global);
-
-
-
-
-		// ft_print_info(global);
-		// find_places(&global);
-		// t_point *test2;
-		// t_list *begin;
-		// begin = global.places;
-		// while (global.places)
-		// {
-		// 	test2 = global.places->content;
-		// 	fprintf(stderr, "possible: [%d] [%d]\n", test2->y, test2->x);
-		// 	fflush(stderr);
-		// 	global.places = global.places->next;
-		// }
-		// global.places = begin;
-		// test2 = global.places->content;
-		// print_cords(*test2);
-		// printf("%d %d\n", 2, 1);
-		// fflush(stdout);
 	}
 	// while (1);
 	return (0);
