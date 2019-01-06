@@ -6,7 +6,7 @@
 /*   By: skunz <skunz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/29 10:28:56 by skunz             #+#    #+#             */
-/*   Updated: 2019/01/05 20:16:20 by skunz            ###   ########.fr       */
+/*   Updated: 2019/01/05 21:43:38 by skunz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,6 @@ typedef struct	s_point {
 	int			x;
 	int			y;
 }				t_point;
-
-typedef struct	s_filler {
-	t_point		cords;
-	char		sign;
-}				t_filler;
 
 typedef struct	s_board {
 	char		**map;

@@ -6,7 +6,7 @@
 /*   By: skunz <skunz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/29 09:59:20 by skunz             #+#    #+#             */
-/*   Updated: 2019/01/05 20:16:25 by skunz            ###   ########.fr       */
+/*   Updated: 2019/01/05 21:44:59 by skunz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,11 @@
 # include <unistd.h>
 # include "map.h"
 # include "libft.h"
+
+typedef struct	s_filler {
+	t_point		cords;
+	char		sign;
+}				t_filler;
 
 typedef struct	s_global {
 	t_board		board;
@@ -33,10 +38,29 @@ enum			e_error {
 	e_open_file,
 };
 
+/*
+** main.c
+*/
+
 void			ft_error(int code);
-void			get_player_number(t_global *global);
-int				ft_place(t_global g);
 void			print_cords(t_point cords);
+
+/*
+** map.c
+*/
+
+void			get_player_number(t_global *global);
+
+/*
+** place.c
+*/
+
+int				ft_place(t_global g);
+
+/*
+** heat.c
+*/
+
 void			init_heat(t_global *g);
 
 #endif
