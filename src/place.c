@@ -6,7 +6,7 @@
 /*   By: skunz <skunz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/02 11:03:52 by skunz             #+#    #+#             */
-/*   Updated: 2019/01/05 16:01:20 by skunz            ###   ########.fr       */
+/*   Updated: 2019/01/05 17:02:45 by skunz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,18 +62,16 @@ int		is_placeable(t_global *g, int b_y, int b_x)
 			if ((g->board.map[b_y][b_x] == g->enemy.sign || g->board.map[b_y][b_x] == ft_tolower(g->enemy.sign))&& g->piece.map[y][x] == '*')
 				return (0);
 			if (g->piece.map[y][x] == '*' && (g->board.map[b_y][b_x] == g->player.sign || g->board.map[b_y][b_x] == ft_tolower(g->player.sign)))
-			{
 				hits++;
+			if (g->piece.map[y][x] == '*' && g->heat[b_y][b_x] > 0)
 				score += g->heat[b_y][b_x];
-			}
 			b_x++;
 			if (b_x >= g->board.size.x)
 				return (0);
 		}
 		b_x = prev_bx;
-		if (b_x < 0)
-			return (0);
-			// b_x = (g->board.size.x - b_x * -1) -1;
+		// if (b_x < 0)
+			// return (0);
 		b_y++;
 		if (b_y >= g->board.size.y)
 			return (0);
@@ -88,13 +86,13 @@ void	ft_place(t_global g)
 	int y;
 	int x;
 	int	score;
-	int prev_score;
+	int lowest_score;
 	int set;
 	t_point closest;
 
 	y = -1;
 	set = 0;
-	prev_score = g.board.size.y + g.board.size.x;
+	lowest_score = 2147483647;
 	while (++y < g.board.size.y)
 	{
 		x = -1;
@@ -104,15 +102,15 @@ void	ft_place(t_global g)
 			// fflush(stderr);
 			if ((score = is_placeable(&g, y, x)))
 			{
-					// fprintf(stderr, "Offset y:%d x:%d\n", g.offset.y, g.offset.x);
+					// fprintf(stderr, "Score %d for y:%d x:%d\n", score, y, x);
 					// fflush(stderr);
-				if (score <= prev_score)
+				if (score <= lowest_score)
 				{
 					closest.x = x - g.offset.x;
 					closest.y = y - g.offset.y;
 					set = 1;
+					lowest_score = score;
 				}
-				prev_score = score;
 			}
 		}
 	}

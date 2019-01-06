@@ -94,21 +94,21 @@ int main()
 		get_piece(&global.piece);
 		init_heat(&global);
 
-		for (int y = 0; y < global.board.size.y; y++)
-		{
-			for (int x = 0; x < global.board.size.x; x++)
-			{
-				if (global.heat[y][x] == -2)
-					fprintf(stderr, "%2c ", global.enemy.sign);
-				else if (global.heat[y][x] == -1)
-					fprintf(stderr, "%2c ", global.player.sign);
-				else
-					fprintf(stderr, "%2d ", global.heat[y][x]);
-				fflush(stderr);
-			}
-			fprintf(stderr, "\n");
-			fflush(stderr);
-		}
+		// for (int y = 0; y < global.board.size.y; y++)
+		// {
+		// 	for (int x = 0; x < global.board.size.x; x++)
+		// 	{
+		// 		if (global.heat[y][x] == -2)
+		// 			fprintf(stderr, "%2c ", 'E');
+		// 		else if (global.heat[y][x] == -1)
+		// 			fprintf(stderr, "%2c ", 'P');
+		// 		else
+		// 			fprintf(stderr, "%2d ", global.heat[y][x]);
+		// 		fflush(stderr);
+		// 	}
+		// 	fprintf(stderr, "\n");
+		// 	fflush(stderr);
+		// }
 
 		ft_place(global);
 		free_global(&global);

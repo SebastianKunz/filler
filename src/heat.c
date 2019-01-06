@@ -6,7 +6,7 @@
 /*   By: skunz <skunz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/03 10:29:28 by skunz             #+#    #+#             */
-/*   Updated: 2019/01/03 16:19:03 by skunz            ###   ########.fr       */
+/*   Updated: 2019/01/05 16:47:10 by skunz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,14 @@ void	set_first(t_global *g)
 				g->heat[y][x] = 1;
 			else if (y > 0 && g->heat[y - 1][x] == -2)
 				g->heat[y][x] = 1;
+		// 	else if (y < g->board.size.y - 1 && x < g->board.size.x - 1 && g->heat[y + 1][x + 1] == -2) // top right
+		// 		g->heat[y][x] = 1;
+		// 	else if (y > 0 && x < g->board.size.x -1 && g->heat[y - 1][x + 1] == -2) // bottom right
+		// 		g->heat[y][x] = 1;
+		// 	else if (y < g->board.size.y - 1 && x > 0 && g->heat[y + 1][x - 1] == -2) // top left
+		// 		g->heat[y][x] = 1;
+		// 	else if (y > 0 && x > 0 && g->heat[y - 1][x - 1] == -2) // bottom left
+		// 		g->heat[y][x] = 1;
 		}
 	}
 }
@@ -78,6 +86,14 @@ void	set_neighbor(t_global *g)
 						g->heat[y][x] = i + 1;
 					else if (y > 0 && g->heat[y - 1][x] == i)
 						g->heat[y][x] = i + 1;
+					// else if (y < g->board.size.y - 1 && x < g->board.size.x - 1 && g->heat[y + 1][x + 1] == i) // top right
+					// 	g->heat[y][x] = i + 1;
+					// else if (y > 0 && x < g->board.size.x -1 && g->heat[y - 1][x + 1] == i) // bottom right
+					// 	g->heat[y][x] = i + 1;
+					// else if (y < g->board.size.y - 1 && x > 0 && g->heat[y + 1][x - 1] == i) // top left
+					// 	g->heat[y][x] = i + 1;
+					// else if (y > 0 && x > 0 && g->heat[y - 1][x - 1] == i) // bottom left
+					// 	g->heat[y][x] = i + 1;
 				}
 		}
 	}
