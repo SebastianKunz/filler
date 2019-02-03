@@ -6,7 +6,7 @@
 #    By: skunz <skunz@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/12/20 14:30:14 by skunz             #+#    #+#              #
-#    Updated: 2019/01/03 10:40:47 by skunz            ###   ########.fr        #
+#    Updated: 2019/01/30 23:38:11 by skunz            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,7 +56,7 @@ CLEAN_NAME	= "Cleaned Filler Binary"
 all: lib obj $(NAME)
 
 $(NAME): $(OBJ)
-	@gcc $(FLAGS) $(LIBFT) $(MINILIB) $(FRAMEWORK) -g $^ -o $@
+	@gcc $(FLAGS) $(LIBFT) -g $^ -o $@
 	@echo "$(COM_COLOR)$(COM_STRING)$(NO_COLOR)"
 
 #OBJECTS
