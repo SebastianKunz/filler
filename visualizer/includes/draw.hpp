@@ -7,8 +7,8 @@
 
 # define B_WIDTH 0.8
 # define B_HEIGHT 0.8
-# define P_WIDTH 0.1
-# define P_HEIGHT 0.5
+# define P_WIDTH 0.18
+# define P_HEIGHT 0.8
 
 class Draw {
 	public:
@@ -18,16 +18,18 @@ class Draw {
 		void	pollEvents(void);
 
 	private:
-		void	_drawText(int, int, std::string);
+		void	_drawText(int, int, std::string, TTF_Font*);
 
 		void	_drawBoard(void) const;
 		void	_drawGrid(int, int, int, int, int, int) const;
-		void	_drawInfo(void) const;
-		void	_drawPiece(void) const;
+		void	_drawInfo(void);
+		void	_drawPiece(void);
 		void	_drawBar(void);
 
 		SDL_Renderer*	_renderer;
-		TTF_Font*		_font;
+		TTF_Font*		_fontPlayer;
+		TTF_Font*		_fontInfo;
+		TTF_Font*		_fontScore;
 		unsigned int	_turnIdx;
 		t_info			_info;
 
