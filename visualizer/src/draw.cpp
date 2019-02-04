@@ -90,7 +90,7 @@ void	Draw::_drawText(int x, int y, std::string msg, TTF_Font* font)
 	SDL_Surface* textSurface = TTF_RenderText_Blended(font, msg.c_str(), color);
 	SDL_Texture* textTexture = SDL_CreateTextureFromSurface(_renderer, textSurface);
 	SDL_QueryTexture(textTexture, nullptr, nullptr, &textRect.w, &textRect.h);
-	// std::cout << "Rect: " << textRect.w << "," << textRect.h << std::endl;
+	std::cout << "Rect: " << textRect.w << "," << textRect.h << std::endl;
 	SDL_RenderCopy(_renderer, textTexture, nullptr, &textRect);
 }
 
