@@ -8,14 +8,11 @@ int main()
 	Parser	parser;
 
 	parser.readInput();
-	Draw draw(parser.getTurns(), window.getWindow(), parser.getTurnCount());
+	Draw draw(window.getWindow(), parser.getInfo());
 	draw.draw();
 	while(!window.isClosed())
 	{
-		// window.pollEvents();
 		draw.pollEvents();
-		// draw.draw();
-		// SDL_Delay(5000);
 	}
 }
 

@@ -2,37 +2,18 @@
 
 Parser::Parser(void)
 {
-	_turnCount = 0;
+	_info.turnCount = 0;
 	_curTurn.p1Pieces = 0;
 	_curTurn.p2Pieces = 0;
+	_info.maxPiece.x = 0;
+	_info.maxPiece.y = 0;
 }
 
 Parser::~Parser(void){}
 
-std::vector<t_turn>	Parser::getTurns(void) const
+t_info	Parser::getInfo(void) const
 {
-	return _turns;
-}
-
-unsigned int	Parser::getTurnCount(void) const
-{
-	return _turnCount;
-}
-
-void	Parser::printData(void)
-{
-	std::cout << _player1.name << std::endl;
-	std::cout << _player2.name << std::endl;
-	for (unsigned int k = 0; k < _turns.size(); k++)
-	{
-		std::cout << _turns[k].piece.size.y << "," << _turns[k].piece.size.x << std::endl;
-		for (unsigned int i = 0; i < _turns[k].piece.map.size(); i++)
-			std::cout << _turns[k].piece.map[i] << std::endl;
-		std::cout << _turns[k].board.size.y << "," << _turns[k].board.size.x << std::endl;
-		for (unsigned int i = 0; i < _turns[k].board.map.size(); i++)
-			std::cout << _turns[k].board.map[i] << std::endl;
-	}
-	std::cout << "Turncount: " << _turnCount << std::endl;
+	return _info;
 }
 
 void	Parser::readInput(void)
@@ -47,19 +28,25 @@ void	Parser::readInput(void)
 		else if (line.find("Plateau") != std::string::npos)
 			_getSize(&_curTurn.board.size, line);
 		else if (line.find("Piece") != std::string::npos)
+		{
 			_getSize(&_curTurn.piece.size, line);
+			if (_curTurn.piece.size.x > _info.maxPiece.x)
+				_info.maxPiece.x = _curTurn.piece.size.x;
+			if (_curTurn.piece.size.y > _info.maxPiece.y)
+				_info.maxPiece.y = _curTurn.piece.size.y;
+		}
 		else if (line.at(0) == '.' || line.at(0) == '*')
 			_curTurn.piece.map.push_back(line);
 		else if (line.find("<got") != std::string::npos)
 		{
-			if (line.find(_player1.sign) != std::string::npos)
+			if (line.find(_info.player1.sign) != std::string::npos)
 				_curTurn.p1Pieces++;
 			else
 				_curTurn.p2Pieces++;
-			_turns.push_back(_curTurn);
+			_info.turns.push_back(_curTurn);
 			_curTurn.piece.map.clear();
 			_curTurn.board.map.clear();
-			_turnCount++;
+			_info.turnCount++;
 		}
 		else if (line.find("==") != std::string::npos)
 			break;
@@ -87,15 +74,15 @@ void	Parser::_getPlayers(void)
 	{
 		if (line.find("p1") != std::string::npos)
 		{
-			_player1.name = line.substr(line.find('/'));
-			_player1.name.pop_back();
-			_player1.sign = 'O';
+			_info.player1.name = line.substr(line.find_last_of('/') + 1);
+			_info.player1.name.pop_back();
+			_info.player1.sign = 'O';
 		}
 		if (line.find("p2") != std::string::npos)
 		{
-			_player2.name = line.substr(line.find('/'));
-			_player2.name.pop_back();
-			_player2.sign = 'O';
+			_info.player2.name = line.substr(line.find_last_of('/') + 1);
+			_info.player2.name.pop_back();
+			_info.player2.sign = 'X';
 			break;
 		}
 	}

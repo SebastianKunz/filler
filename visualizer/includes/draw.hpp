@@ -3,25 +3,36 @@
 
 # include "window.hpp"
 # include "parser.hpp"
+# include <SDL_ttf.h>
 
-class Draw{
+# define B_WIDTH 0.8
+# define B_HEIGHT 0.8
+# define P_WIDTH 0.1
+# define P_HEIGHT 0.5
+
+class Draw {
 	public:
-		Draw(std::vector<t_turn>, SDL_Window*, unsigned int);
+		Draw(SDL_Window*, t_info);
 		~Draw(void);
-		void	draw(void) const;
+		void	draw(void);
 		void	pollEvents(void);
 
 	private:
+		void	_drawText(int, int, std::string);
+
 		void	_drawBoard(void) const;
 		void	_drawGrid(int, int, int, int, int, int) const;
+		void	_drawInfo(void) const;
 		void	_drawPiece(void) const;
-		void	_drawBar(void) const;
-		void	_clear(void) const;
+		void	_drawBar(void);
 
-		std::vector<t_turn>	_turns;
 		SDL_Renderer*	_renderer;
+		TTF_Font*		_font;
 		unsigned int	_turnIdx;
-		unsigned int	_maxTurns;
+		t_info			_info;
+
+		int				_boardSpace;
+		int				_infoSpace;
 };
 
 #endif
