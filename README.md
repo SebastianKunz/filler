@@ -46,4 +46,4 @@ Generate a heat map scores each cell by its distance to the first enemy piece
 
 Pick the position with the smallest score (the closest to the enemy)
 
-[![](https://i.postimg.cc/HWvmy9P7/rsz-1screen-shot-2019-02-05-at-124422-pm.png)](https://postimg.cc/WtZxRgV2)
+[![](https://i.postimg.cc/TwZL95RV/rsz-1screen-shot-2019-02-05-at-23112-pm.png)](https://postimg.cc/S2fxQsYR)
