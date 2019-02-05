@@ -75,6 +75,8 @@ void	Draw::pollEvents(void)
 						draw();
 						pollEvents();
 						_turnIdx++;
+						if (_turnIdx == _info.turnCount)
+							flag = !flag;
 					}
 					break;
 				case SDLK_r:
