@@ -11,9 +11,7 @@ int main()
 	Draw draw(window.getWindow(), parser.getInfo());
 	draw.draw();
 	while(!window.isClosed())
-	{
 		draw.pollEvents();
-	}
 }
 
 

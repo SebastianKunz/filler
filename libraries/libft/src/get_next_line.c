@@ -3,74 +3,78 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skunz <skunz@student.42.us.org>            +#+  +:+       +#+        */
+/*   By: skunz <skunz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/06 16:20:08 by skunz             #+#    #+#             */
-/*   Updated: 2018/12/12 18:05:15 by skunz            ###   ########.fr       */
+/*   Updated: 2019/02/04 19:12:45 by skunz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int		ft_normi(int ret, char **keeper, int fd)
+char			*ft_stock_the_new_line(char *str)
 {
-	if (ret == -1)
-		return (-1);
-	else if (ret == 0 && !keeper[fd])
-		return (0);
-	else
-		return (1);
-}
-
-int		ft_attach(char **line, char **keeper)
-{
-	int		i;
-	char	*temp;
+	int			i;
+	int			len;
+	char		*new;
 
 	i = 0;
-	while ((*keeper)[i] && (*keeper)[i] != '\n')
+	len = 0;
+	while (str[len++])
+		;
+	if (!(new = (char *)malloc(sizeof(*new) * len + 1)))
+		return (NULL);
+	while (i < len && str[i] != '\n')
+	{
+		new[i] = str[i];
 		i++;
-	if ((*keeper)[i] == '\n')
-	{
-		*line = ft_strsub(*keeper, 0, i);
-		temp = ft_strdup(&((*keeper)[i + 1]));
-		free(*keeper);
-		*keeper = temp;
-		if (!(*keeper)[0])
-			ft_strdel(keeper);
 	}
-	else
-	{
-		*line = ft_strdup(*keeper);
-		ft_strdel(keeper);
-	}
-	return (1);
+	new[i] = '\0';
+	return (new);
 }
 
-int		get_next_line(const int fd, char **line)
+static char		*ft_clean_new(char *str)
 {
-	static char		*keeper[MAX_FD];
-	char			buff[BUFF_SIZE + 1];
-	char			*temp;
-	int				ret;
+	char		*new;
+	int			i;
 
-	if (!line || fd < 0 || fd > MAX_FD)
-		return (-1);
-	while ((ret = read(fd, buff, BUFF_SIZE)) > 0)
+	i = 0;
+	while (str[i] != '\n' && str[i])
+		i++;
+	if ((str[i] && !str[i + 1]) || !str[i])
 	{
+		ft_strdel(&str);
+		return (NULL);
+	}
+	new = ft_strdup(str + i + 1);
+	ft_strdel(&str);
+	return (new);
+}
+
+int				get_next_line(const int fd, char **line)
+{
+	char		buff[BUFF_SIZE + 1];
+	int			ret;
+	static char	*new;
+
+	if (!new)
+		new = ft_strnew(1);
+	if (BUFF_SIZE < 0 || !line || fd > MAX_FD || fd < 0)
+		return (-1);
+	ret = 2;
+	while (!(ft_strchr(new, '\n')))
+	{
+		ret = read(fd, buff, BUFF_SIZE);
+		if (ret == -1)
+			return (-1);
 		buff[ret] = '\0';
-		if (!keeper[fd])
-			keeper[fd] = ft_strdup(buff);
-		else
-		{
-			temp = ft_strjoin(keeper[fd], buff);
-			free(keeper[fd]);
-			keeper[fd] = temp;
-		}
-		if (ft_strchr(buff, '\n'))
+		new = ft_strjoin(new, buff);
+		if (ret == 0 && *new == '\0')
+			return (0);
+		if (ret == 0)
 			break ;
 	}
-	if (ft_normi(ret, keeper, fd) != 1)
-		return (ft_normi(ret, keeper, fd));
-	return (ft_attach(line, &keeper[fd]));
+	*line = ft_stock_the_new_line(new);
+	new = ft_clean_new(new);
+	return (1);
 }

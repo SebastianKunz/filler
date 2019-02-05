@@ -6,7 +6,7 @@
 #    By: skunz <skunz@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/09/23 20:21:22 by skunz             #+#    #+#              #
-#    Updated: 2019/02/03 11:15:55 by skunz            ###   ########.fr        #
+#    Updated: 2019/02/04 13:49:52 by skunz            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,7 @@ FLAGS = -Wall -Wextra -Werror -fsanitize=address
 
 INCLUDES_VISU = -I ~/.brew/include/SDL2/ -D_THREAD_SAFE
 
-LIB_VISU = -L ~/.brew/lib -l SDL2 -l SDL2_ttf
+LIB_VISU = -L ~/.brew/lib -l SDL2 -l SDL2_ttf -l SDL2_image
 
 SRC = main.cpp window.cpp parser.cpp draw.cpp
 

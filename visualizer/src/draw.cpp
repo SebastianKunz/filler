@@ -10,11 +10,22 @@ Draw::Draw(SDL_Window* window, t_info info) : _info(info)
 	if (TTF_Init() < 0)
 		std::cerr << "error: " << TTF_GetError() << std::endl;
 
-	_fontPlayer = TTF_OpenFont("fonts/Arial.ttf", 30);
-	_fontInfo = TTF_OpenFont("fonts/Arial.ttf", 25);
-	_fontScore = TTF_OpenFont("fonts/Arial.ttf", 22);
+	_fontPlayer = TTF_OpenFont("fonts/PTS75F.ttf", 30);
+	_fontInfo = TTF_OpenFont("fonts/PTS75F.ttf", 25);
+	_fontScore = TTF_OpenFont("fonts/PTS75F.ttf", 22);
 	if (!_fontPlayer || !_fontInfo || !_fontScore)
 		std::cerr << "error: " << TTF_GetError() << std::endl;
+
+	if (IMG_Init(IMG_INIT_PNG) != IMG_INIT_PNG)
+		std::cerr << "error: img" << std::endl;
+
+	SDL_Surface* surface = IMG_Load("InfoBar.png");
+	if (!surface)
+		std::cerr << "Failed to create surface" << std::endl;
+	_infoImg = SDL_CreateTextureFromSurface(_renderer, surface);
+	if (!_infoImg)
+		std::cerr << "Failed to create texture" << std::endl;
+	SDL_FreeSurface(surface);
 
 	_infoSpace = WIN_WIDTH * (1 - B_WIDTH);
 	_boardSpace = WIN_WIDTH - _infoSpace;
@@ -23,6 +34,9 @@ Draw::Draw(SDL_Window* window, t_info info) : _info(info)
 Draw::~Draw(void)
 {
 	SDL_DestroyRenderer(_renderer);
+	TTF_CloseFont(_fontPlayer);
+	TTF_CloseFont(_fontScore);
+	IMG_Quit();
 }
 
 
@@ -81,22 +95,32 @@ void	Draw::pollEvents(void)
 	}
 }
 
+int		Draw::_getTextWidth(TTF_Font* font, std::string msg)
+{
+	t_point	size;
+	SDL_Color color = {200, 200, 200, 255};
+	SDL_Surface* textSurface = TTF_RenderText_Blended(font, msg.c_str(), color);
+	SDL_Texture* textTexture = SDL_CreateTextureFromSurface(_renderer, textSurface);
+	SDL_FreeSurface(textSurface);
+	SDL_QueryTexture(textTexture, nullptr, nullptr, &size.x, &size.y);
+
+	return size.x;
+}
+
 void	Draw::_drawText(int x, int y, std::string msg, TTF_Font* font)
 {
 	SDL_Color color = {200, 200, 200, 255};
-	SDL_Rect textRect;
-	textRect.x = x;
-	textRect.y = y;
+	SDL_Rect textRect = {x, y, 0, 0};
 	SDL_Surface* textSurface = TTF_RenderText_Blended(font, msg.c_str(), color);
 	SDL_Texture* textTexture = SDL_CreateTextureFromSurface(_renderer, textSurface);
+	SDL_FreeSurface(textSurface);
 	SDL_QueryTexture(textTexture, nullptr, nullptr, &textRect.w, &textRect.h);
-	std::cout << "Rect: " << textRect.w << "," << textRect.h << std::endl;
 	SDL_RenderCopy(_renderer, textTexture, nullptr, &textRect);
 }
 
 void	Draw::_drawBoard(void) const
 {
-	if (_info.turns[_turnIdx].board.map.size() == 0) // draw board
+	if (_info.turns[_turnIdx].board.map.size() == 0)
 		return ;
 
 	int width = (WIN_WIDTH * B_WIDTH) / _info.turns[0].board.size.x;
@@ -149,14 +173,19 @@ void	Draw::_drawGrid(int startX, int startY, int sizeX, int sizeY, int padW, int
 	}
 }
 
+void	Draw::_drawImage(int x, int y, int w, int h)
+{
+	SDL_Rect rect = {x, y, w, h};
+	SDL_RenderCopy(_renderer, _infoImg, nullptr, &rect);
+}
+
 void	Draw::_drawInfo(void)
 {
-	SDL_Rect rect;
+	SDL_Rect rect = {0, 0, 0, 0};
+	int height;
 
 	rect.w = WIN_WIDTH * (1 - B_WIDTH);
 	rect.h = WIN_HEIGHT;
-	rect.x = 0;
-	rect.y = 0;
 	SDL_SetRenderDrawColor(_renderer, 50, 50, 50, 255);
 	SDL_RenderFillRect(_renderer, &rect);
 	SDL_SetRenderDrawColor(_renderer, 0, 0, 0, 255);
@@ -164,7 +193,8 @@ void	Draw::_drawInfo(void)
 	SDL_SetRenderDrawColor(_renderer, 255, 255, 255, 255);
 	SDL_RenderDrawLine(_renderer, rect.w * 0.1, rect.h / 10, rect.w - rect.w * 0.1, rect.h / 10);
 	_drawText(rect.w / 5, rect.h / 20, "Visualizer by Skunz", _fontInfo);
-	SDL_RenderDrawLine(_renderer, rect.w * 0.1, rect.h / 2, rect.w - rect.w * 0.1, rect.h / 2);
+	height =  WIN_WIDTH * P_WIDTH / _info.maxPiece.x * _info.maxPiece.y + (1 - P_HEIGHT) * WIN_HEIGHT;
+	_drawImage(0, height, 383, 331);
 }
 
 void	Draw::_drawBar(void)
@@ -194,33 +224,47 @@ void	Draw::_drawBar(void)
 			break;
 		SDL_RenderFillRect(_renderer, &rect);
 	}
+
 	if (_boardSpace / 2 - sizeP1 + _infoSpace < _infoSpace + rect.w)
 		sizeP1 = _boardSpace / 2 - rect.w;
-	_drawGrid(_boardSpace / 2 - sizeP1 + _infoSpace, rect.y, 1, 1, sizeP1, rect.h);
-	_drawText(_boardSpace / 2 - sizeP1 / 2 + _infoSpace, 0, _info.player1.name, _fontPlayer);
-	_drawText(_boardSpace / 2 - sizeP1 / 2 + _infoSpace, rect.y + rect.h / 4, std::to_string(_info.turns[_turnIdx].p1Pieces), _fontScore);
-
 	if (sizeP2 > _boardSpace / 2 - rect.w * 2)
 		sizeP2 = _boardSpace / 2 - rect.w;
+	//grid
+	_drawGrid(_boardSpace / 2 - sizeP1 + _infoSpace, rect.y, 1, 1, sizeP1, rect.h);
 	_drawGrid(_boardSpace / 2 + _infoSpace, rect.y, 1, 1, sizeP2, rect.h);
-	_drawText(_boardSpace / 2 + sizeP2 / 2 + _infoSpace, 0, _info.player2.name, _fontPlayer);
-	_drawText(_boardSpace / 2 + sizeP2 / 2 + _infoSpace, rect.y + rect.h / 4, std::to_string(_info.turns[_turnIdx].p2Pieces), _fontScore);
+	//player text
+	int textWidthP1 = _getTextWidth(_fontPlayer, _info.player1.name);
+	int textWidthP2 = _getTextWidth(_fontPlayer, _info.player2.name);
+	if (_boardSpace / 2 - sizeP1 / 2 + _infoSpace + textWidthP1 < _boardSpace / 2 + sizeP2 / 2 + _infoSpace - textWidthP2 / 2)
+	{
+		_drawText(_boardSpace / 2 - sizeP1 / 2 + _infoSpace - textWidthP1 / 2, rect.y / 2 - 20, _info.player1.name, _fontPlayer);
+		_drawText(_boardSpace / 2 + sizeP2 / 2 + _infoSpace - textWidthP2 / 2, rect.y / 2 - 20, _info.player2.name, _fontPlayer);
+	}
+	//score
+	std::string scoreStrP1 = std::to_string(_info.turns[_turnIdx].p1Pieces);
+	std::string scoreStrP2 = std::to_string(_info.turns[_turnIdx].p2Pieces);
+	textWidthP1 = _getTextWidth(_fontScore, scoreStrP1);
+	textWidthP2 = _getTextWidth(_fontScore, scoreStrP2);
+	if (textWidthP1 < sizeP1)
+		_drawText(_boardSpace / 2 - sizeP1 / 2 + _infoSpace - textWidthP1 / 2, rect.y + rect.h / 4, scoreStrP1, _fontScore);
+	if (textWidthP2 < sizeP2)
+	_drawText(_boardSpace / 2 + sizeP2 / 2 + _infoSpace - textWidthP2 / 2, rect.y + rect.h / 4, scoreStrP2, _fontScore);
 }
 
 void	Draw::_drawPiece(void)
 {
 	SDL_Rect rect;
 
-	int height = (WIN_WIDTH * P_WIDTH) / _info.maxPiece.x;
+	int height = WIN_WIDTH * P_WIDTH / _info.maxPiece.x;
 	int width = WIN_HEIGHT * P_HEIGHT / _info.maxPiece.y;
 	rect.h = height < width ? height : width;
 	rect.w = rect.h;
 	for (int y = 0; y < _info.maxPiece.y; y++)
 	{
-		rect.y = rect.h * y + (1 - B_HEIGHT) * WIN_HEIGHT;
+		rect.y = rect.h * y + WIN_HEIGHT * (1 - P_HEIGHT);
 		for (int x = 0; x < _info.maxPiece.x; x++)
 		{
-			rect.x = rect.w + rect.w * x;
+			rect.x = rect.w * x + (_infoSpace - rect.w * _info.maxPiece.x) / 2;
 			if (_info.turns[_turnIdx].piece.size.x > x && _info.turns[_turnIdx].piece.size.y > y && _info.turns[_turnIdx].piece.map[y][x] == '*')
 				SDL_SetRenderDrawColor(_renderer, 200, 200, 0, 255);
 			else if (_info.turns[_turnIdx].piece.size.x > x && _info.turns[_turnIdx].piece.size.y > y && _info.turns[_turnIdx].piece.map[y][x] == '.')
@@ -230,7 +274,6 @@ void	Draw::_drawPiece(void)
 			SDL_RenderFillRect(_renderer, &rect);
 		}
 	}
-	_drawGrid(rect.w, (1 - B_HEIGHT) * WIN_HEIGHT,
+	_drawGrid((_infoSpace - rect.w * _info.maxPiece.x) / 2, (1 - P_HEIGHT) * WIN_HEIGHT,
 		_info.maxPiece.x, _info.maxPiece.y, rect.w, rect.h);
-	_drawText(_infoSpace / 3, (1 - B_HEIGHT) * WIN_HEIGHT + _info.maxPiece.y * rect.h + WIN_HEIGHT * 0.1, "Controls", _fontInfo);
 }
