@@ -49,7 +49,13 @@ void	Parser::readInput(void)
 			_info.turnCount++;
 		}
 		else if (line.find("==") != std::string::npos)
+		{
+			_info.turns.push_back(_curTurn);
+			_curTurn.piece.map.clear();
+			_curTurn.board.map.clear();
+			_info.turnCount++;
 			break;
+		}
 	}
 }
 

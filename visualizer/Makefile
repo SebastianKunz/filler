@@ -6,7 +6,7 @@
 #    By: skunz <skunz@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/09/23 20:21:22 by skunz             #+#    #+#              #
-#    Updated: 2019/02/04 13:49:52 by skunz            ###   ########.fr        #
+#    Updated: 2019/02/04 21:11:49 by skunz            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,9 +22,9 @@ NAME = visualizer
 
 FLAGS = -Wall -Wextra -Werror -fsanitize=address
 
-INCLUDES_VISU = -I ~/.brew/include/SDL2/ -D_THREAD_SAFE
+INCLUDES_VISU = -I resources/SDL2/Includes
 
-LIB_VISU = -L ~/.brew/lib -l SDL2 -l SDL2_ttf -l SDL2_image
+LIB_VISU = -L resources/SDL2/lib -l SDL2 -l SDL2_ttf -l SDL2_image
 
 SRC = main.cpp window.cpp parser.cpp draw.cpp
 
@@ -34,7 +34,7 @@ OBJ = $(addprefix $(OBJ_DIR),$(SRC:.cpp=.o))
 ###############################  COLORS AND TEXT  ##############################
 
 #COLORS
-COM_COLOR   = \033[0;32m
+COM_COLOR   = \033[0;34m
 NO_COLOR    = \033[m
 
 #TEXT

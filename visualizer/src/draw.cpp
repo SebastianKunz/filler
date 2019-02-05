@@ -10,16 +10,16 @@ Draw::Draw(SDL_Window* window, t_info info) : _info(info)
 	if (TTF_Init() < 0)
 		std::cerr << "error: " << TTF_GetError() << std::endl;
 
-	_fontPlayer = TTF_OpenFont("fonts/PTS75F.ttf", 30);
-	_fontInfo = TTF_OpenFont("fonts/PTS75F.ttf", 25);
-	_fontScore = TTF_OpenFont("fonts/PTS75F.ttf", 22);
+	_fontPlayer = TTF_OpenFont("visualizer/resources/fonts/PTS75F.ttf", 30);
+	_fontInfo = TTF_OpenFont("visualizer/resources/fonts/PTS75F.ttf", 25);
+	_fontScore = TTF_OpenFont("visualizer/resources/fonts/PTS75F.ttf", 22);
 	if (!_fontPlayer || !_fontInfo || !_fontScore)
 		std::cerr << "error: " << TTF_GetError() << std::endl;
 
 	if (IMG_Init(IMG_INIT_PNG) != IMG_INIT_PNG)
 		std::cerr << "error: img" << std::endl;
 
-	SDL_Surface* surface = IMG_Load("InfoBar.png");
+	SDL_Surface* surface = IMG_Load("visualizer/resources/img/InfoBar.png");
 	if (!surface)
 		std::cerr << "Failed to create surface" << std::endl;
 	_infoImg = SDL_CreateTextureFromSurface(_renderer, surface);
@@ -60,18 +60,13 @@ void	Draw::pollEvents(void)
 			switch (event.key.keysym.sym)
 			{
 				case SDLK_RIGHT:
-					if (_turnIdx < _info.turnCount) // fix this please
-					{
-						// std::cout << _turnIdx << std::endl;
-						_turnIdx = _turnIdx == 0 ? 1 : _turnIdx;
-						draw();
 						_turnIdx++;
-					}
+						_turnIdx = _turnIdx >= _info.turnCount ? _info.turnCount - 1 : _turnIdx;
+						draw();
 					break;
 				case SDLK_LEFT:
-					// std::cout << _turnIdx << std::endl;
-						_turnIdx = _turnIdx == 0 ? 0 : _turnIdx - 1;
-						draw();
+					_turnIdx = _turnIdx == 0 ? 0 : _turnIdx - 1;
+					draw();
 					break;
 				case SDLK_SPACE:
 					while (_turnIdx < _info.turnCount)
@@ -192,7 +187,7 @@ void	Draw::_drawInfo(void)
 	SDL_RenderDrawLine(_renderer, rect.w, 0, rect.w, rect.h);
 	SDL_SetRenderDrawColor(_renderer, 255, 255, 255, 255);
 	SDL_RenderDrawLine(_renderer, rect.w * 0.1, rect.h / 10, rect.w - rect.w * 0.1, rect.h / 10);
-	_drawText(rect.w / 5, rect.h / 20, "Visualizer by Skunz", _fontInfo);
+	_drawText(rect.w / 4, rect.h / 20, "Visualizer by Skunz", _fontInfo);
 	height =  WIN_WIDTH * P_WIDTH / _info.maxPiece.x * _info.maxPiece.y + (1 - P_HEIGHT) * WIN_HEIGHT;
 	_drawImage(0, height, 383, 331);
 }
@@ -204,7 +199,7 @@ void	Draw::_drawBar(void)
 	SDL_Rect rect;
 
 	rect.w = ceilf(WIN_WIDTH / 2 / static_cast<float>(_info.turnCount));
-	rect.h = 50; //dynamic plz
+	rect.h = 50;
 	rect.y = WIN_HEIGHT * 0.05;
 	int sizeP1 = rect.w * _info.turns[_turnIdx - 1].p1Pieces;
 	int sizeP2 = rect.w * _info.turns[_turnIdx - 1].p2Pieces;
@@ -241,14 +236,15 @@ void	Draw::_drawBar(void)
 		_drawText(_boardSpace / 2 + sizeP2 / 2 + _infoSpace - textWidthP2 / 2, rect.y / 2 - 20, _info.player2.name, _fontPlayer);
 	}
 	//score
-	std::string scoreStrP1 = std::to_string(_info.turns[_turnIdx].p1Pieces);
-	std::string scoreStrP2 = std::to_string(_info.turns[_turnIdx].p2Pieces);
+	std::string scoreStrP1 = std::to_string(_info.turns[_turnIdx - 1].p1Pieces);
+	std::string scoreStrP2 = std::to_string(_info.turns[_turnIdx - 1].p2Pieces);
 	textWidthP1 = _getTextWidth(_fontScore, scoreStrP1);
 	textWidthP2 = _getTextWidth(_fontScore, scoreStrP2);
 	if (textWidthP1 < sizeP1)
 		_drawText(_boardSpace / 2 - sizeP1 / 2 + _infoSpace - textWidthP1 / 2, rect.y + rect.h / 4, scoreStrP1, _fontScore);
 	if (textWidthP2 < sizeP2)
 	_drawText(_boardSpace / 2 + sizeP2 / 2 + _infoSpace - textWidthP2 / 2, rect.y + rect.h / 4, scoreStrP2, _fontScore);
+
 }
 
 void	Draw::_drawPiece(void)
