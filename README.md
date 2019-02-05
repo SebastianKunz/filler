@@ -1,16 +1,17 @@
-# Filler - AI fights visualized
+# Filler - AI Fights Visualized
 ## Preview
 ![](https://media.giphy.com/media/PhYmvqUril9qApPDUo/giphy.gif)
 ## Goal
-The Filler project is part of the 42 curriculum. 
+The Filler project is part of the 42 curriculum. It's part of the algorithm branch and teached me:
+- pathfinding
+- reading output of a ruby script
+- Visualization with SDL2 and C++
 
 ## Game Rules
 Filler is an algorithmic game which consists in filling a grid of a known size in advance
 with pieces of random size and shapes, without the pieces being stacked more than one
 square above each other and without them exceeding the grid. If one of these conditions
 is not met, the game stops.
-
-more here
 
 ## Install - SDL2 SDL2_TTF and SDL2_Image required
 ### Homebrew
@@ -39,6 +40,10 @@ Example:
 
 
 ## My Solution
-[![rsz-1screen-shot-2019-02-05-at-124412-pm.png](https://i.postimg.cc/J4dhRLWv/rsz-1screen-shot-2019-02-05-at-124412-pm.png)](https://postimg.cc/ZCpmLXnx)
+Generate a heat map scores each cell by its distance to the first enemy piece
 
-[![rsz-1screen-shot-2019-02-05-at-124422-pm.png](https://i.postimg.cc/HWvmy9P7/rsz-1screen-shot-2019-02-05-at-124422-pm.png)](https://postimg.cc/WtZxRgV2)
+[![](https://i.postimg.cc/J4dhRLWv/rsz-1screen-shot-2019-02-05-at-124412-pm.png)](https://postimg.cc/ZCpmLXnx)
+
+Pick the position with the smallest score (the closest to the enemy)
+
+[![](https://i.postimg.cc/HWvmy9P7/rsz-1screen-shot-2019-02-05-at-124422-pm.png)](https://postimg.cc/WtZxRgV2)
