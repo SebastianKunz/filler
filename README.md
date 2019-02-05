@@ -28,7 +28,7 @@ is not met, the game stops.
 
 Example:
 
-`./resources/filler_vm -p1 ./skunz.filler -p2 ./resources/players/grati.filler -f resources/maps/map01 | ./skunz.visualizer`
+`./resources/filler_vm -p1 ./skunz.filler -p2 ./resources/players/carli.filler -f resources/maps/map01 | ./skunz.visualizer`
 
 ### Run without Visualizer
 
@@ -36,7 +36,7 @@ Example:
 
 Example:
 
-`./resources/filler_vm -p1 ./skunz.filler -p2 ./resources/players/grati.filler -f resources/maps/map01`
+`./resources/filler_vm -p1 ./skunz.filler -p2 ./resources/players/carli.filler -f resources/maps/map01`
 
 
 ## My Solution
