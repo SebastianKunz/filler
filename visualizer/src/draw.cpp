@@ -39,7 +39,6 @@ Draw::~Draw(void)
 	IMG_Quit();
 }
 
-
 void	Draw::draw(void)
 {
 	_drawBoard();
@@ -52,6 +51,7 @@ void	Draw::draw(void)
 void	Draw::pollEvents(void)
 {
 	SDL_Event event;
+	static bool	flag = true;
 
 	while (SDL_PollEvent(&event))
 	{
@@ -69,9 +69,11 @@ void	Draw::pollEvents(void)
 					draw();
 					break;
 				case SDLK_SPACE:
-					while (_turnIdx < _info.turnCount)
+					flag = !flag;
+					while (_turnIdx < _info.turnCount && !flag)
 					{
 						draw();
+						pollEvents();
 						_turnIdx++;
 					}
 					break;
@@ -244,7 +246,6 @@ void	Draw::_drawBar(void)
 		_drawText(_boardSpace / 2 - sizeP1 / 2 + _infoSpace - textWidthP1 / 2, rect.y + rect.h / 4, scoreStrP1, _fontScore);
 	if (textWidthP2 < sizeP2)
 	_drawText(_boardSpace / 2 + sizeP2 / 2 + _infoSpace - textWidthP2 / 2, rect.y + rect.h / 4, scoreStrP2, _fontScore);
-
 }
 
 void	Draw::_drawPiece(void)

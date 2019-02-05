@@ -16,4 +16,8 @@ fclean: clean
 	@/bin/rm skunz.filler
 	@/bin/rm skunz.visualizer
 
-re: fclean all
+re:
+	@make -C $(ALGO) re
+	@mv $(ALGO)skunz.filler .
+	@make -C $(VISU) re
+	@mv $(VISU)visualizer skunz.visualizer
