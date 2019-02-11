@@ -40,7 +40,7 @@ Example:
 
 
 ## My Solution
-Generate a heat map scores each cell by its distance to the first enemy piece
+Generate a heat map. Gives each cell a score by its distance to the enemy.
 
 [![](https://i.postimg.cc/J4dhRLWv/rsz-1screen-shot-2019-02-05-at-124412-pm.png)](https://postimg.cc/ZCpmLXnx)
 
